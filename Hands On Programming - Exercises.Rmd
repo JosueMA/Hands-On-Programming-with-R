@@ -1,0 +1,2561 @@
+---
+title: "Hand On Programming with R"
+subtitle: "Code & Exercises"
+author: "Josue Mendoza"
+output:   
+  html_document:
+    theme: "cerulean"
+    highlight: tango
+    toc: true
+    toc_depth: 5
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE, error = TRUE)
+```
+
+# Part I. Project 1: Weighted Dice
+## Chapter 1. The Very Basics
+### The R User Interface
+
+```{r error=TRUE}
+1 + 1
+100:130
+5 - +1
+3 % 5
+2 * 3
+4 - 1
+6 / (4 - 1)
+```
+##### Exercise 1.1 (p. 6 - 7)
+
+That’s the basic interface for executing R code in RStudio. Think you have it? If so, try doing these simple tasks. If you execute everything correctly, you should end up with the same number that you started with:
+
+1. Choose any number and add 2 to it.
+
+```{r}
+19 # Number choosed
+19 + 2
+```
+
+ 2. Multiply the result by 3.
+ 
+```{r}
+21 * 3
+```
+
+3. Subtract 6 from the answer.
+
+```{r}
+63 - 6
+```
+
+4. Divide what you get by 3.
+
+```{r}
+57 / 3
+```
+
+
+
+
+### Objects
+
+```{r error=TRUE}
+a <- 1 
+a
+a + 2
+
+die <- 1:6 
+die
+
+Name <- 1 
+name <- 0
+Name + 1 
+
+my_number <- 1 
+my_number
+my_number <- 999 
+my_number
+
+die - 1
+die / 2
+die * die
+
+1:2
+1:4
+die
+die + 1:2
+die + 1:4
+
+die %*% die
+die %o% die
+```
+
+### Functions
+
+```{r error=TRUE}
+round(3.1415)
+factorial(3)
+
+mean(1:6)
+mean(die)
+round(mean(die))
+
+sample(x = 1:4, size = 2)
+sample(x = die, size = 1)
+sample(x = die, size = 1)
+sample(x = die, size = 1)
+sample(die, size = 1)
+round(3.1415, corners = 2)
+args(round)
+round(3.1415, digits = 2)
+sample(die, 1)
+sample(size = 1, x = die)
+```
+
+### Sample with Replacement
+
+```{r error=TRUE}
+sample(die, size = 2)
+sample(die, size = 2, replace = TRUE)
+sample(die, size = 2, replace = TRUE)
+dice <- sample(die, size = 2, replace = TRUE) 
+dice
+sum(dice)
+
+dice
+dice
+dice
+```
+
+### Writing Your Functions
+
+```{r error=TRUE}
+die <- 1:6
+dice <- sample(die, size = 2, replace = TRUE) 
+sum(dice)
+```
+
+```
+my_function <- function() {}
+```
+
+```{r error=TRUE}
+roll <- function() {
+die <- 1:6
+dice <- sample(die, size = 2, replace = TRUE) 
+sum(dice)
+}
+
+roll()
+
+roll
+
+dice
+1 + 1 
+sqrt(2)
+
+dice <- sample(die, size = 2, replace = TRUE) 
+two <- 1 + 1
+a <- sqrt(2)
+```
+
+#### Arguments
+
+```{r error=TRUE}
+roll2 <- function() {
+dice <- sample(bones, size = 2, replace = TRUE) 
+sum(dice)
+}
+
+roll2()
+
+roll2 <- function(bones) {
+dice <- sample(bones, size = 2, replace = TRUE) 
+sum(dice)
+}
+
+roll2(bones = 1:4)
+roll2(bones = 1:6)
+roll2(1:20)
+
+roll2()
+
+roll2 <- function(bones = 1:6) {
+dice <- sample(bones, size = 2, replace = TRUE) 
+sum(dice)
+}
+
+roll2()
+```
+
+
+## Chapter 2. Packages and Help Pages
+### Packages
+
+```{r eval=FALSE}
+install.packages("ggplot2")
+```
+
+```{r error=TRUE}
+qplot
+library("ggplot2")
+qplot
+
+x <- c(-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1) 
+x
+
+y <- x ^ 3
+y
+
+qplot(x, y)
+
+x <- c(1, 2, 2, 2, 3, 3) 
+qplot(x, binwidth = 1)
+
+x2 <- c(1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 4) 
+qplot(x2, binwidth = 1)
+```
+
+##### Exercise 2.1 (p. 27)
+
+Let x3 be the following vector: 
+
+```
+x3 <- c(0, 1, 1, 2, 2, 2, 3, 3, 4)
+```
+
+Imagine what a histogram of `x3` would look like. Assume that the histogram has a bin width of 1. How many bars will the histogram have? Where will they appear? How high will each be?
+
+When you are done, plot a histogram of x3 with binwidth = 1, and see if you are right.
+
+```{r}
+library(ggplot2)
+x3 <- c(0, 1, 1, 2, 2, 2, 3, 3, 4)
+qplot(x3, binwidth = 1)
+```
+
+***
+
+```{r}
+replicate(3, 1 + 1)
+replicate(10, roll())
+
+rolls <- replicate(10000, roll())
+qplot(rolls, binwidth = 1)
+```
+
+### Getting Help with Help Pages
+
+```{r}
+?sqrt
+?log10
+?sample
+
+??log
+```
+
+##### Exercise 2.2 (p. 32)
+
+Rewrite the roll function to roll a pair of weighted dice:
+
+```
+roll <- function() {
+die <- 1:6
+dice <- sample(die, size = 2, replace = TRUE) 
+sum(dice)
+}
+```
+
+You will need to add a prob argument to the sample function inside of roll. This argument should tell sample to sample the numbers one through five with probability 1/8 and the number 6 with probability 3/8.
+
+When you are finished, read on for a model answer.
+
+```{r}
+roll <- function() {
+die <- 1:6
+dice <- sample(die, size = 2, replace = TRUE, prob = c(1/8, 1/8, 1/8, 1/8, 1/8, 3/8)) 
+sum(dice)
+}
+
+rolls <- replicate(10000, roll())
+qplot(rolls, binwidth = 1)
+```
+
+
+# Part II. Project 2: Playing Cards
+## Chapter 3. R Objects
+### Atomic Vectors
+
+```{r}
+die <- c(1, 2, 3, 4, 5, 6) 
+die
+
+is.vector(die)
+
+five <- 5 
+five
+
+is.vector(five)
+length(five)
+
+length(die)
+
+int <- 1L
+text <- "ace"
+
+int <- c(1L, 5L)
+text <- c("ace", "hearts")
+
+sum(num)
+sum(text)
+```
+
+#### Doubles
+
+```{r}
+die <- c(1, 2, 3, 4, 5, 6) 
+die
+typeof(die)
+```
+
+#### Integers
+
+```{r}
+int <- c(-1L, 2L, 4L) 
+int
+typeof(int)
+
+sqrt(2)^2 - 2
+```
+
+#### Characters
+
+```{r}
+text <- c("Hello", "World") 
+text
+
+typeof(text)
+
+typeof("Hello")
+```
+
+##### Exercise 3.1 (p. 41)
+
+Can you spot the difference between a character string and a number? Here’s a test: Which of these are character strings and which are numbers? 1, "1", "one".
+
+Only the first one, which is not surrounded by quotation marks.
+
+#### Logicals
+
+```{r}
+3 > 4
+
+logic <- c(TRUE, FALSE, TRUE) 
+logic
+
+typeof(logic)
+
+typeof(F)
+```
+
+#### Complex and Raw
+
+```{r}
+comp <- c(1 + 1i, 1 + 2i, 1 + 3i) 
+comp
+typeof(comp) 
+
+raw(3)
+typeof(raw(3))
+```
+
+##### Exercise 3.2 (p. 43)
+
+Create an atomic vector that stores just the face names of the cards in a royal flush, for example, the ace of spades, king of spades, queen of spades, jack of spades, and ten of spades. The face name of the ace of spades would be “ace,” and “spades” is the suit.
+
+Which type of vector will you use to save the names? 
+
+Charcater vector because are names.
+
+```{r}
+hand <- c("ace", "king", "queen", "jack", "ten")
+hand
+typeof(head)
+```
+
+### Attributes
+
+```{r}
+attributes(die)
+```
+
+#### Names
+
+```{r}
+names(die)
+
+names(die) <- c("one", "two", "three", "four", "five", "six")
+
+names(die)
+attributes(die)
+
+die
+die + 1
+
+names(die) <- c("uno", "dos", "tres", "quatro", "cinco", "seis") 
+die
+
+names(die) <- NULL 
+die
+```
+
+#### Dim
+
+```{r}
+dim(die) <- c(2, 3) 
+die
+
+dim(die) <- c(3, 2) 
+die
+
+dim(die) <- c(1, 2, 3) 
+die
+```
+
+### Matrices
+
+```{r}
+m <- matrix(die, nrow = 2) 
+m
+
+m <- matrix(die, nrow = 2, byrow = TRUE) # fill the matrix row by row
+m
+```
+
+### Arrays
+
+```{r}
+ar <- array(c(11:14, 21:24, 31:34), dim = c(2, 2, 3)) 
+ar
+```
+
+##### Exercise 3.3 (p. 47)
+
+Create the following matrix, which stores the name and suit of every card in a royal flush.
+
+    ##      [,1]    [,2]
+    ## [1,] "ace"   "spades"
+    ## [2,] "king"  "spades"
+    ## [3,] "queen" "spades"
+    ## [4,] "jack"  "spades"
+    ## [5,] "ten"   "spades"
+
+```{r}
+card_names <- c("ace", "king", "queen", "jack", "ten")
+spades <- rep("spades", 5)
+
+matrix(c(card_names, spades), ncol = 2)
+```
+
+```{r}
+hand1 <- c("ace", "king", "queen", "jack", "ten", "spades", "spades",
+      "spades", "spades", "spades")
+matrix(hand1, nrow = 5)
+matrix(hand1, ncol = 2)
+dim(hand1) <- c(5, 2)
+    
+hand2 <- c("ace", "spades", "king", "spades", "queen", "spades", "jack",
+      "spades", "ten", "spades")
+matrix(hand2, nrow = 5, byrow = TRUE) 
+matrix(hand2, ncol = 2, byrow = TRUE)
+```
+
+
+### Class
+
+```{r}
+dim(die) <- c(2, 3) 
+typeof(die)
+class(die)
+
+attributes(die)
+class("Hello")
+class(5)
+```
+
+#### Dates and Times
+
+```{r}
+now <- Sys.time()
+now
+
+typeof(now)
+class(now)
+unclass(now)
+
+mil <- 1000000 
+mil
+
+class(mil) <- c("POSIXct", "POSIXt") 
+mil
+```
+
+#### Factors
+
+```{r}
+gender <- factor(c("male", "female", "female", "male"))
+typeof(gender)
+
+attributes(gender)
+unclass(gender)
+
+gender
+as.character(gender)
+```
+
+##### Exercise 3.4 (p. 51)
+
+Many card games assign a numerical value to each card. For example, in blackjack, each face card is worth 10 points, each number card is worth between 2 and 10 points, and each ace is worth 1 or 11 points, depending on the final score.
+Make a virtual playing card by combining “ace,” “heart,” and 1 into a vector. What type of atomic vector will result? Check if you are right.
+
+```{r}
+cards <- c("ace", "hearth", 1)
+cards
+typeof(cards)
+```
+
+### Coercion
+
+```{r}
+sum(c(TRUE, TRUE, FALSE, FALSE))
+sum(c(1, 1, 0, 0))
+
+as.character(1)
+as.logical(1)
+as.numeric(FALSE)
+```
+
+### Lists
+
+```{r}
+list1 <- list(100:130, "R", list(TRUE, FALSE))
+list1
+```
+
+##### Exercise 3.5 (p. 54)
+
+Use a list to store a single playing card, like the ace of hearts, which has a point value of one. The list should save the face of the card, the suit, and the point value in separate elements.
+
+```{r}
+list("ace", "hearts", 1)
+```
+
+
+### Data Frames
+
+```{r}
+df <- data.frame(face = c("ace", "two", "six"),
+      suit = c("clubs", "clubs", "clubs"), value = c(1, 2, 3))
+df
+
+typeof(df)
+class(df)
+str(df)
+
+df <- data.frame(face = c("ace", "two", "six"),
+suit = c("clubs", "clubs", "clubs"), value = c(1, 2, 3), stringsAsFactors = FALSE)
+
+deck <- data.frame(
+      face = c("king", "queen", "jack", "ten", "nine", "eight", "seven", "six",
+        "five", "four", "three", "two", "ace", "king", "queen", "jack", "ten",
+        "nine", "eight", "seven", "six", "five", "four", "three", "two", "ace",
+        "king", "queen", "jack", "ten", "nine", "eight", "seven", "six", "five",
+        "four", "three", "two", "ace", "king", "queen", "jack", "ten", "nine",
+        "eight", "seven", "six", "five", "four", "three", "two", "ace"),
+      suit = c("spades", "spades", "spades", "spades", "spades", "spades",
+        "spades", "spades", "spades", "spades", "spades", "spades", "spades",
+        "clubs", "clubs", "clubs", "clubs", "clubs", "clubs", "clubs", "clubs",
+        "clubs", "clubs", "clubs", "clubs", "clubs", "diamonds", "diamonds",
+        "diamonds", "diamonds", "diamonds", "diamonds", "diamonds", "diamonds",
+        "diamonds", "diamonds", "diamonds", "diamonds", "diamonds", "hearts",
+        "hearts", "hearts", "hearts", "hearts", "hearts", "hearts", "hearts",
+        "hearts", "hearts", "hearts", "hearts", "hearts"),
+value = c(13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 13, 12, 11, 10, 9, 8,  7, 6, 5, 4, 3, 2, 1, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 13, 12, 11,  10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
+)
+```
+
+
+### Loading Data
+
+```{r}
+library(readr)
+deck <- read_csv("~/Desktop/Estadística/tidyverse/(2014) Hands-On Programming with R_ Write Your Own Functions and Simulations/Exercises/deck.csv")
+
+head(deck)
+```
+
+### Saving Data
+
+```{r}
+write.csv(deck, file = "cards.csv", row.names = FALSE)
+```
+
+## Chapter 4. Notation
+### Selecting Values 
+
+`deck[row(s), column(s)]`
+
+#### Positive Integers
+
+```{r}
+head(deck)
+deck[1, 1]
+deck[1, c(1, 2, 3)]
+
+new <- deck[1, c(1, 2, 3)] 
+new
+
+deck[c(1, 1), c(1, 2, 3)]
+
+vec <- c(6,1,3,6,10,5) 
+vec[1:3]
+
+deck[1:2, 1:2]
+
+deck[1:2, 1]
+
+deck[1:2, 1, drop = FALSE]
+```
+
+#### Negative Integers
+
+```{r}
+deck[-(2:52), 1:3]
+deck[c(-1, 1), 1]
+deck[-1, 1]
+```
+
+#### Zero
+
+```{r}
+deck[0, 0]
+```
+
+#### Blank Spaces
+
+```{r}
+deck[1, ]
+```
+
+#### Logical Values
+
+```{r}
+deck[1, c(TRUE, TRUE, FALSE)]
+
+rows <- c(TRUE, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F,  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F,  F, F, F, F, F, F, F, F, F, F, F, F, F, F)
+
+## Only prints "TRUEs"
+
+deck[rows, ]
+```
+
+#### Names
+
+```{r}
+deck[1, c("face", "suit", "value")]
+deck[ , "value"]
+```
+
+### Deal a Card
+##### Exercise 4.1 (p. 70)
+
+Complete the following code to make a function that returns the first row of a data frame:
+
+```
+deal <- function(cards) { 
+#?
+}
+```
+
+```{r}
+deal <- function(cards){
+  cards[1, ]
+}
+
+deal(deck)
+```
+
+### Shuffle the Deck
+
+```{r}
+deck2 <- deck[1:52, ]
+head(deck2)
+
+deck3 <- deck[c(2, 1, 3:52), ]
+head(deck3)
+
+random <- sample(1:52, size = 52)
+random
+
+deck4 <- deck[random, ]
+head(deck4)
+```
+
+##### Exercise 4.2 (p. 73)
+
+Use the preceding ideas to write a shuffle function. shuffle should take a data frame and return a shuffled copy of the data frame.
+
+```{r}
+## My solution
+
+shuffle_df <- function(df){
+  random <- sample(1:nrow(df), size = nrow(df))
+  df[random, ]
+}
+
+shuffle_df(deck)
+
+## Book solution
+
+shuffle <- function(cards) { 
+  random <- sample(1:52, size = 52) 
+  cards[random, ]
+}
+
+deal(deck)
+
+deck2 <- shuffle(deck)
+deal(deck2)
+```
+
+### Dollar Signs and Double Brackets
+
+```{r}
+deck$value
+mean(deck$value)
+median(deck$value)
+
+lst <- list(numbers = c(1, 2), logical = TRUE, strings = c("a", "b", "c"))
+lst
+
+lst[1]
+
+sum(lst[1])
+
+lst$numbers
+sum(lst$numbers)
+
+lst[[1]] # does the same that $
+
+lst["numbers"]
+lst[["numbers"]]
+```
+
+## Chapter 5. Modifying Values
+
+```{r}
+deck2 <- deck
+```
+
+### Changin Values in Place
+
+```{r}
+vec <- c(0, 0, 0, 0, 0, 0) 
+vec
+
+vec[1]
+vec[1] <- 1000 # Changing first value within the vector
+vec
+
+vec[c(1, 3, 5)] <- c(1, 1, 1)
+vec
+
+vec[4:6] <- vec[4:6] + 1
+vec
+
+vec[7] <- 0
+vec
+
+deck2$new <- 1:52
+head(deck2)
+
+deck2$new <- NULL
+head(deck2)
+
+deck2[c(13, 26, 39, 52), ]
+
+deck2[c(13, 26, 39, 52), 3]
+
+deck2$value[c(13, 26, 39, 52)]
+
+deck2$value[c(13, 26, 39, 52)] <- c(14, 14, 14, 14)
+# or
+deck2$value[c(13, 26, 39, 52)] <- 14
+
+head(deck2, 13)
+
+
+deck3 <- shuffle(deck)
+head(deck3)
+
+
+```
+
+### Logical Subsetting
+
+```{r}
+vec
+
+vec[c(FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE)]
+```
+
+#### Logical Tests
+
+```{r}
+1 > 2
+1 > c(0, 1, 2)
+c(1, 2, 3) == c(3, 2, 1)
+
+1 %in% c(3, 4, 5)
+c(1, 2) %in% c(3, 4, 5)
+c(1, 2, 3) %in% c(3, 4, 5) ##
+c(1, 2, 3, 4) %in% c(3, 4, 5) ##
+```
+
+##### Exercise 5.1 (p. 82)
+
+Extract the `face` column of `deck2` and test whether each value is equal to `ace`. As a challenge, use R to quickly count how many cards are equal to `ace`.
+
+```{r}
+deck2$face
+deck2$face == 'ace'
+sum(deck2$face == 'ace')
+```
+
+```{r}
+deck3$face == "ace"
+deck3$value[deck3$face == "ace"]
+deck3$value[deck3$face == "ace"] <- 14
+head(deck3)
+```
+
+##### Exercise 5.2 (p. 84)
+
+```{r}
+deck4 <- deck
+deck4$value <- 0
+head(deck4, 13)
+```
+
+Assign a value of 1 to every card in deck4 that has a suit of hearts.
+
+```{r}
+deck4$suit
+deck4$suit == "hearts"
+deck4$value[deck4$suit == "hearts"] <- 1
+deck4[deck4$suit == "hearts", ]
+```
+
+```{r}
+deck4[deck4$face == "queen", ]
+deck4[deck4$suit == "spades", ]
+```
+
+#### Boolean Operators
+
+```{r}
+a <- c(1, 2, 3) 
+b <- c(1, 2, 3) 
+c <- c(1, 2, 4)
+a == b
+b == c
+a == b & b == c
+
+deck4$face == "queen" & deck4$suit == "spades"
+queenOfSpades <- deck4$face == "queen" & deck4$suit == "spades"
+deck4[queenOfSpades, ]
+deck4$value[queenOfSpades]
+deck4$value[queenOfSpades] <- 13
+deck4[queenOfSpades, ]
+```
+
+##### Exercise 5.3 (p. 87)
+
+If you think you have the hang of logical tests, try converting these sentences into tests written with R code. To help you out, I’ve defined some R objects after the sentences that you can use these to test your answers:
+
+• Is w positive?
+• Is x greater than 10 and less than 20?
+• Is object y the word February?
+• Is every value in z a day of the week?
+
+```{r}
+w <- c(-1, 0, 1)
+x <- c(5, 15)
+y <- "February"
+z <- c("Monday", "Tuesday", "Friday")
+```
+
+```{r}
+w > 0
+x > 10 & x < 20
+y == "February"
+weekdays <- c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"); z %in% weekdays
+# or
+all(z %in% c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
+      "Saturday", "Sunday"))
+```
+
+***
+blackjack
+
+```{r}
+deck5 <- deck
+head(deck5, 13)
+facecard <- deck5$face %in% c("king", "queen", "jack")
+deck5[facecard, ]
+deck5$value[facecard] <- 10
+head(deck5, 13)
+```
+***
+
+### Missing Information
+
+```{r}
+1 + NA
+NA == 1
+```
+
+#### na.rm
+
+```{r}
+c(NA, 1:50)
+mean(c(NA, 1:50))
+mean(c(NA, 1:50), na.rm = TRUE)
+```
+
+#### is.na
+
+```{r}
+NA == NA
+c(1, 2, 3, NA) == NA
+is.na(NA)
+
+vec <- c(1, 2, 3, NA)
+is.na(vec)
+```
+
+```{r}
+deck5$value[deck5$face == "ace"] <- NA
+head(deck5, 13)
+```
+
+
+## Chapter 6. Environments
+
+```{r}
+deal(deck)
+deal(deck)
+deal(deck)
+```
+
+### Environments
+
+```{r}
+library(pryr)
+pryr::parenvs(all = TRUE)
+```
+
+### Working with Environments
+
+```{r}
+as.environment("package:stats")
+
+globalenv()
+baseenv()
+emptyenv()
+
+parent.env(globalenv())
+
+parent.env(emptyenv())
+
+ls(emptyenv())
+ls(globalenv())
+
+ls.str(globalenv())
+
+head(globalenv()$deck, 3)
+
+assign("new", "Hello Global", envir = globalenv())
+globalenv()$new
+```
+
+#### The Active Environment
+
+```{r}
+environment()
+```
+
+### Scoping Rules
+
+
+### Assignment
+
+```{r}
+new
+new <- "Hello Active"
+new
+```
+
+### Evaluation
+
+```{r}
+show_env <- function(){ list(ran.in = environment(),
+        parent = parent.env(environment()),
+        objects = ls.str(environment()))
+}
+
+show_env() # The results reveal that R created a new environment named 0x7ff711d12e28 to run show_env() in.
+
+show_env()
+
+environment(show_env)
+environment(parenvs)
+
+show_env <- function(){ 
+a <- 1
+b <- 2
+c <- 3
+list(ran.in = environment(),
+        parent = parent.env(environment()),
+        objects = ls.str(environment()))
+    }
+
+show_env()
+
+foo <- "take me to your runtime"
+show_env <- function(x = foo){ list(ran.in = environment(),
+        parent = parent.env(environment()),
+        objects = ls.str(environment()))
+    }
+show_env()
+
+```
+
+```{r}
+deal <- function() { 
+  deck[1, ]
+}
+```
+
+##### Exercise 6.1 (p. 103)
+
+Will R be able to find deck and return an answer when I call the new version of deal, such as deal()?
+
+Yes, because of the scoping rules
+
+```{r}
+deal()
+environment(deal)
+deal()
+deal()
+```
+
+```{r}
+DECK <- deck
+deck <- deck[-1, ]
+head(deck, 3)
+
+deal <- function() { 
+  card <- deck[1, ] 
+  deck <- deck[-1, ] 
+  card
+}
+
+deal()
+deal()
+```
+
+
+##### Exercise 6.2 (p. 106)
+
+Rewrite the deck <- deck[-1, ] line of deal to assign deck[-1, ] to an object named deck in the global environment. Hint: consider the assign function.
+
+```{r}
+deal <- function() { 
+  card <- deck[1, ] 
+  assign("deck", deck[-1, ], envir = globalenv())
+  card
+}
+
+deal()
+```
+
+```{r}
+shuffle <- function(cards) { 
+  random <- sample(1:52, size = 52) 
+  cards[random, ]
+}
+
+head(deck, 3)
+a <- shuffle(deck)
+head(deck, 3)
+head(a, 3)
+```
+
+
+##### Exercise 6.3 (p. 107)
+
+Rewrite shuffle so that it replaces the copy of deck that lives in the global environment with a shuffled version of DECK, the intact copy of deck that also lives in the global environment. The new version of shuffle should have no arguments and return no output.
+
+```{r}
+shuffle <- function(){
+  random <- sample(1:nrow(DECK), size = nrow(DECK))
+  assign("deck", DECK[random, ], envir = globalenv())
+}
+```
+
+### Closures
+
+```{r}
+shuffle()
+deal()
+deal()
+
+setup <- function(deck) { 
+  DECK <- 
+  deck
+
+  DEAL <- function() {
+    card <- deck[1, ]
+    assign("deck", deck[-1, ], envir = globalenv()) 
+    card
+    }
+
+  SHUFFLE <- function(){
+    random <- sample(1:52, size = 52)
+    assign("deck", DECK[random, ], envir = globalenv())
+    } 
+}
+
+
+setup <- function(deck) { 
+  DECK <- deck
+
+  DEAL <- function() {
+  card <- deck[1, ]
+  assign("deck", deck[-1, ], envir = globalenv()) 
+  card
+}
+
+  SHUFFLE <- function(){
+  random <- sample(1:52, size = 52)
+  assign("deck", DECK[random, ], envir = globalenv())
+}
+     list(deal = DEAL, shuffle = SHUFFLE)
+    }
+
+cards <- setup(deck)
+deal <- cards$deal
+shuffle <- cards$shuffle
+
+deal
+shuffle
+
+environment(deal)
+environment(shuffle)
+
+setup <- function(deck) { 
+  DECK <- deck
+  
+  DEAL <- function() {
+  card <- deck[1, ]
+  assign("deck", deck[-1, ], envir = parent.env(environment())) 
+  card
+}
+
+  SHUFFLE <- function(){
+  random <- sample(1:52, size = 52)
+  assign("deck", DECK[random, ], envir = parent.env(environment()))
+}
+     list(deal = DEAL, shuffle = SHUFFLE)
+    }
+
+cards <- setup(deck)
+deal <- cards$deal
+shuffle <- cards$shuffle
+
+rm(deck)
+shuffle()
+deal()
+deal()
+```
+
+# Part III. Project 3: Slot Machine
+## Chapter 7. Programs
+
+```{r}
+get_symbols <- function() {
+wheel <- c("DD", "7", "BBB", "BB", "B", "C", "0") 
+sample(wheel, size = 3, replace = TRUE,
+prob = c(0.03, 0.03, 0.06, 0.1, 0.25, 0.01, 0.52))
+}
+
+get_symbols()
+get_symbols()
+get_symbols()
+```
+
+### Strategy 
+
+#### Sequential Steps
+
+```{r eval=FALSE}
+play <- function() {
+# step 1: generate symbols
+symbols <- get_symbols()
+# step 2: display the symbols
+      print(symbols)
+      # step 3: score the symbols
+      score(symbols)
+    }
+```
+
+#### Parallel Cases
+
+### `if` statements
+
+```
+if (this) { 
+that
+}
+```
+```{r eval=FALSE}
+if(num < 0){ 
+  num <- num * -1
+}
+```
+
+```{r}
+num <- -2
+if (num < 0) { 
+  num <- num * -1
+}
+
+num
+
+num <- 4
+if (num < 0) { 
+  num <- num * -1
+}
+
+num
+
+
+num <- -1
+if (num < 0) {
+print("num is negative.") 
+  print("Don't worry, I'll fix it.")
+  num <- num * -1
+  print("Now num is positive.")
+}
+
+num
+```
+
+##### Quizz A (p. 122)
+
+What will this return?
+
+```
+x <- 1 
+if (3 == 3) {
+x <- 2 
+}
+x
+```
+
+```{r}
+x <- 1 
+if (3 == 3) {
+x <- 2 
+}
+x
+```
+
+*Answer*: the code will return the number 2. x begins as 1, and then R encounters the if statement. Since the condition evaluates to TRUE, R will run x <- 2, changing the value of x.
+
+##### Quizz B (p. 122)
+
+What will this return?
+
+```
+x <- 1
+if (TRUE) {
+x <- 2 
+}
+x
+```
+
+```{r}
+x <- 1
+if (TRUE) {
+x <- 2 
+}
+x
+```
+*Answer*: this code will also return the number 2. It works the same as the code in Quiz A, except the condition in this statement is already `TRUE`. R doesn’t even need to evaluate it. As a result, the code inside the `if` statement will be run, and x will be set to 2.
+
+##### Quizz C (p. 122 - 123)
+
+What will this return?
+
+```
+x <- 1
+if (x == 1) {
+  x <- 2  
+  if (x == 1) {
+  x <- 3 
+  }
+}
+x
+```
+
+```{r}
+x <- 1
+
+if (x == 1) {
+  x <- 2   
+  if (x == 1) {
+  x <- 3 
+  }
+}
+
+x
+```
+
+*Answer*: once again, the code will return the number 2. x starts out as 1, and the condition of the first if statement will evaluate to `TRUE`, which causes R to run the code in the body of the if statement. First, R sets x equal to 2, then R evaluates the second if statement, which is in the body of the first. This time x == 1 will evaluate to `FALSE` because x now equals 2. As a result, R ignores x <- 3 and exits both if statements.
+
+### `else` statements
+
+```
+if (this) { 
+  Plan A
+} else { 
+  Plan B
+}
+```
+
+```{r}
+a <- 3.14
+dec <- a - trunc(a) 
+dec
+if (dec >= 0.5) { 
+  a <- trunc(a) + 1
+} else {
+a <- trunc(a)
+}
+a
+
+a <- 1 
+b <- 1
+if (a > b) {
+  print("A wins!")
+} else if (a < b) {
+  print("B wins!")
+} else { 
+  print("Tie.")
+}
+```
+
+```
+if (# Case 1: all the same) {    1
+  prize <- # look up the prize   2
+} else if (# Case 2: all bars) { 3
+  prize <- # assign $5           4
+} else {
+  # count cherries               5
+  prize <- # calculate a prize   6
+}
+
+# count diamonds                 7
+# double the prize if necessary  8
+```
+```
+score <- function(symbols) {
+  # calculate a prize
+  prize
+}
+```
+
+```{r}
+symbols <- c("7", "7", "7")
+
+symbols <- c("B", "BB", "BBB")
+symbols <- c("C", "DD", "0")
+```
+
+##### Exercise 7.1 (p. 126 - 127)
+
+*A vector named symbols will contain three of the same symbol if the first element of symbols is equal to the second element of symbols and the second element of symbols is equal to the third element of symbols.*
+
+Turn the preceding statement into a logical test written in R. Use your knowledge of logical tests, Boolean operators, and subsetting from Chapter 4. The test should work with the vector `symbols` and return a TRUE *if and only if* each element in symbols is the same. Be sure to test your code on symbols.
+
+```{r}
+# Values to play
+symbols <- c("7", "7", "7")
+symbols <- c("B", "BB", "BBB")
+
+# Possible tests
+symbols[1] == symbols[2] & symbols[2] == symbols[3]
+all(symbols[1] == symbols[2], symbols[2] == symbols[3])
+symbols == symbols[1]
+all(symbols == symbols[1])
+length(unique(symbols)) == 1 # Most elegant one
+
+### Using a pair withon if else statements
+if (symbols[1] == symbols[2] & symbols[2] == symbols[3]) {
+  print("It contain three of the same symbol! :)")
+} else { 
+  print("It does NOT contain three of the same symbol! :(")
+    }
+
+# or
+
+if (all(symbols[1] == symbols[2], symbols[2] == symbols[3])) {
+  print("It contain three of the same symbol! :)")
+} else { 
+  print("It does NOT contain three of the same symbol! :(")
+    }
+```
+***
+```{r}
+same <- symbols[1] == symbols[2] && symbols[2] == symbols[3]
+```
+
+```
+if (same) {
+  prize <- # look up the prize
+} else if (# Case 2: all bars) { 
+  prize <- # assign $5
+} else {
+  # count cherries
+  prize <- # calculate a prize
+}
+    # count diamonds
+    # double the prize if necessary
+```
+
+##### Exercise 7.2 (p. 128)
+
+```{r}
+symbols <- c("B", "BBB", "BB")
+```
+Use R’s logical and Boolean operators to write a test that will determine whether a vector named symbols contains only symbols that are a type of bar. Check whether your test works with our example symbols vector. Remember to describe how the test should work in English, and then convert the solution to R.
+
+*All symbols are equal to one combination of bars (i.e., are equal to B or BB or BB) *
+
+```{r}
+# Values to play
+symbols <- c("7", "7", "7") # Test 1
+symbols <- c("B", "BB", "BBB") # Test 2
+symbols <- c("BB", "B", "BBB") # Test 3
+symbols <- c("BB", "B", "Z") # Test 4
+
+symbols == c("B", "BB", "BBB") # This don't do what I want
+symbols == "B" | symbols == "BB" | symbols == "BBB"
+any(symbols == "B", symbols == "BB", symbols == "BBB") # Fails with Test 4
+
+symbols[1] == "B" | symbols[1] == "BB" | symbols[1] == "BBB" &
+symbols[2] == "B" | symbols[2] == "BB" | symbols[2] == "BBB" &
+symbols[3] == "B" | symbols[3] == "BB" | symbols[3] == "BBB" # Fails with Test 4 ¿WHY?
+
+symbols %in% c("B", "BB", "BBB")
+all(symbols %in% c("B", "BB", "BBB"))
+```
+
+```
+same <- symbols[1] == symbols[2] && symbols[2] == symbols[3]
+    bars <- symbols %in% c("B", "BB", "BBB")
+if (same) {
+  prize <- # look up the prize
+} else if (all(bars)) { 
+  prize <- # assign $5
+} else {
+  # count cherries
+  prize <- # calculate a prize
+}
+    # count diamonds
+    # double the prize if necessary
+```
+
+```{r}
+symbols <- c("B", "B", "B") 
+all(symbols %in% c("B", "BB", "BBB"))
+```
+
+```{r}
+if (same) {
+  symbol <- symbols[1] 
+  if (symbol == "DD") {
+    prize <- 800
+  } else if (symbol == "7") {
+    prize <- 80
+  } else if (symbol == "BBB") {
+    prize <- 40
+  } else if (symbol == "BB") {
+    prize <- 5
+  } else if (symbol == "B") {
+    prize <- 10
+  } else if (symbol == "C") {
+    prize <- 10
+  } else if (symbol == "0") {
+    prize <- 0
+  }
+}
+```
+
+
+### Lookup Tables
+
+```{r}
+payouts <- c("DD" = 100, "7" = 80, "BBB" = 40, "BB" = 25, "B" = 10, "C" = 10, "0" = 0)
+payouts
+
+payouts["DD"]
+payouts["B"]
+unname(payouts["DD"])
+
+symbols <- c("7", "7", "7") 
+symbols[1]
+payouts[symbols[1]]
+symbols <- c("C", "C", "C") 
+payouts[symbols[1]]
+unname(payouts[symbols[1]])
+```
+
+```
+same <- symbols[1] == symbols[2] && symbols[2] == symbols[3]
+bars <- symbols %in% c("B", "BB", "BBB")
+
+if (same) {
+  payouts <- c("DD" = 100, "7" = 80, "BBB" = 40, "BB" = 25, "B" = 10, "C" = 10, "0" = 0)        # lookup table
+  prize <- unname(payouts[symbols[1]])
+} else if (all(bars)) { 
+  prize <- # assign $5
+} else {
+  # count cherries
+  prize <- # calculate a prize
+}
+    # count diamonds
+    # double the prize if necessary
+
+```
+
+Case 2
+
+```
+same <- symbols[1] == symbols[2] && symbols[2] == symbols[3]
+bars <- symbols %in% c("B", "BB", "BBB")
+
+if (same) {
+  payouts <- c("DD" = 100, "7" = 80, "BBB" = 40, "BB" = 25,
+"B" = 10, "C" = 10, "0" = 0) 
+  prize <- unname(payouts[symbols[1]])
+} else if (all(bars)) { 
+  prize <- 5
+} else {
+  # count cherries
+  prize <- # calculate a prize
+}
+  # count diamonds
+  # double the prize if necessary
+```
+
+##### Exercise 7.3 (p. 132)
+
+How can you tell which elements of a vector named symbols are a C? Devise a test and try it out.
+
+```{r}
+# Values for test
+
+symbols <- c("C", "CC", "C") # Test 1
+symbols <- c("C", "B", "BB") # Test 2
+symbols <- c("B", "B", "B") # Test 3
+
+symbols %in% "C"
+symbols == "C"
+
+```
+
+##### Challenge (p. 132)
+
+How might you count the number of Cs in a vector named symbols? Remember R’s coercion rules.
+
+```{r}
+sum(symbols == "C")
+```
+
+R coerces TRUE to 1 and FALSE to 0.
+
+```
+same <- symbols[1] == symbols[2] && symbols[2] == symbols[3]
+    bars <- symbols %in% c("B", "BB", "BBB")
+if (same) {
+  payouts <- c("DD" = 100, "7" = 80, "BBB" = 40, "BB" = 25,
+"B" = 10, "C" = 10, "0" = 0) 
+  prize <- unname(payouts[symbols[1]])
+} else if (all(bars)) { 
+  prize <- 5
+} else {
+  cherries <- sum(symbols == "C") 
+  prize <- # calculate a prize
+  }
+  diamonds <- sum(symbols == "DD")
+  # double the prize if necessary
+```
+
+```{r}
+if (cherries == 2) { 
+  prize <- 5
+} else if (cherries == 1) { 
+  prize <- 2
+} else { 
+prize <- 0
+}
+
+c(0, 2, 5)
+
+c(0, 2, 5)[1]
+```
+
+```{r eval=FALSE}
+# Zero Cherries
+symbols <- c("B", "B", "B")
+(cherries <- sum(symbols == "C"))
+
+cherries + 1
+c(0, 2, 5)[cherries + 1] 
+
+# One Cherrie
+symbols <- c("C", "B", "BB") 
+(cherries <- sum(symbols == "C"))
+
+cherries + 1
+c(0, 2, 5)[cherries + 1]
+
+# Two Cherries
+symbols <- c("C", "CC", "C")
+(cherries <- sum(symbols == "C"))
+
+cherries + 1
+c(0, 2, 5)[cherries + 1]
+
+# We don’t need to worry about three cherries because that outcome is already covered in Case 1.
+```
+
+```{r}
+same <- symbols[1] == symbols[2] && symbols[2] == symbols[3]
+bars <- symbols %in% c("B", "BB", "BBB")
+
+if (same) {
+  payouts <- c("DD" = 100, "7" = 80, "BBB" = 40, "BB" = 25,
+"B" = 10, "C" = 10, "0" = 0) 
+  prize <- unname(payouts[symbols[1]])
+} else if (all(bars)) { 
+  prize <- 5
+} else {
+  cherries <- sum(symbols == "C") 
+  prize <- c(0, 2, 5)[cherries + 1]
+  }
+  diamonds <- sum(symbols == "DD")
+  # double the prize if necessary
+```
+
+##### Exercise 7.4 (p. 135)
+
+Write a method for adjusting prize based on diamonds. Describe a solution in English first, and then write your code.
+
+*Duplicate current prize for each diamond*
+
+```{r}
+prize <- prize * 2 ^ diamonds
+```
+
+```{r}
+symbols <- c("C", "DD", "DD")
+
+same <- symbols[1] == symbols[2] && symbols[2] == symbols[3]
+bars <- symbols %in% c("B", "BB", "BBB")
+
+if (same) {
+  payouts <- c("DD" = 100, "7" = 80, "BBB" = 40, "BB" = 25,
+"B" = 10, "C" = 10, "0" = 0) 
+  prize <- unname(payouts[symbols[1]])
+} else if (all(bars)) { 
+  prize <- 5
+} else {
+  cherries <- sum(symbols == "C") 
+  prize <- c(0, 2, 5)[cherries + 1]
+  }
+  
+diamonds <- sum(symbols == "DD")
+prize <- prize * 2 ^ diamonds
+```
+
+
+### Code Comments
+
+```{r}
+# identify case
+    same <- symbols[1] == symbols[2] && symbols[2] == symbols[3]
+    bars <- symbols %in% c("B", "BB", "BBB")
+    
+# get prize
+if (same) {
+  payouts <- c("DD" = 100, "7" = 80, "BBB" = 40, "BB" = 25,
+"B" = 10, "C" = 10, "0" = 0) 
+  prize <- unname(payouts[symbols[1]])
+} else if (all(bars)) { 
+    prize <- 5
+} else {
+  cherries <- sum(symbols == "C") 
+  prize <- c(0, 2, 5)[cherries + 1]
+}
+
+# adjust for diamonds
+diamonds <- sum(symbols == "DD")
+prize * 2 ^ diamonds
+```
+
+```{r}
+score <- function (symbols) {
+  
+# identify case
+same <- symbols[1] == symbols[2] && symbols[2] == symbols[3]
+bars <- symbols %in% c("B", "BB", "BBB")
+    
+# get prize
+if (same) {
+  payouts <- c("DD" = 100, "7" = 80, "BBB" = 40, "BB" = 25,
+"B" = 10, "C" = 10, "0" = 0) 
+  prize <- unname(payouts[symbols[1]])
+} else if (all(bars)) { 
+    prize <- 5
+} else {
+  cherries <- sum(symbols == "C") 
+  prize <- c(0, 2, 5)[cherries + 1]
+}
+
+# adjust for diamonds
+diamonds <- sum(symbols == "DD")
+prize * 2 ^ diamonds
+}
+```
+
+```{r}
+play <- function() { 
+  symbols <- get_symbols() 
+  print(symbols) 
+  score(symbols)
+}
+```
+
+```{r}
+play()
+play()
+play()
+```
+
+## Chapter 8. S3
+
+```{r}
+play()
+play()
+
+one_play <- play()
+one_play
+```
+
+### The S3 System
+
+```{r}
+num <- 1000000000 
+print(num)
+
+class(num) <- c("POSIXct", "POSIXt") 
+print(num)
+```
+
+### Attributes
+
+```{r}
+attributes(DECK)
+row.names(DECK)
+row.names(DECK) <- 101:152
+levels(DECK) <- c("level 1", "level 2", "level 3")
+attributes(DECK)
+
+one_play <- play()
+one_play
+attributes(one_play)
+
+attr(one_play, "symbols") <- c("B", "0", "B")
+attributes(one_play)
+
+attr(one_play, "symbols")
+one_play
+
+one_play + 1
+```
+
+
+##### Exercise 8.1 (p. 142)
+
+Modify play to return a prize that contains the symbols associated with it as an attribute named `symbols`. Remove the redundant call to print(`symbols`):
+
+```
+play <- function() { 
+  symbols <- get_symbols() 
+  print(symbols) 
+  score(symbols)
+}
+```
+
+```{r}
+play()
+
+play <- function() { 
+  symbols <- get_symbols() 
+  prize <- score(symbols)
+  attr(prize, "symbols") <- symbols
+  prize
+}
+
+play()
+```
+
+```{r}
+play
+two_play <- play()
+two_play 
+```
+
+```{r}
+play <- function() {
+  symbols <- get_symbols() 
+  structure(score(symbols), symbols = symbols)
+}
+
+three_play <- play() 
+three_play
+
+
+slot_display <- function(prize){ 
+  # extract symbols
+  symbols <- attr(prize, "symbols")
+
+  # collapse symbols into single string
+  symbols <- paste(symbols, collapse = " ")
+
+  # combine symbol with prize as a regular expression
+  # \n is regular expression for new line (i.e. return or enter) 
+  string <- paste(symbols, prize, sep = "\n$")
+  
+  # display regular expression in console without quotes
+  cat(string)
+}
+
+slot_display(one_play)
+
+symbols <- attr(one_play, "symbols")
+symbols
+
+
+symbols <- paste(symbols, collapse = " ")
+symbols
+
+prize <- one_play
+string <- paste(symbols, prize, sep = "\n$")
+string
+
+cat(string)
+
+slot_display(play())
+slot_display(play())
+```
+
+
+### Generic Functions
+
+```{r}
+print(pi)
+pi
+
+print(head(deck))
+head(deck)
+
+print(play())
+play()
+
+num <- 1000000000 
+print(num)
+
+class(num) <- c("POSIXct", "POSIXt") 
+print(num)
+```
+
+### Methods
+
+```{r}
+print
+print.POSIXct
+print.factor
+methods(print)
+```
+
+#### Method Dispatch
+
+```{r}
+
+
+class(one_play) <- "slots"
+args(print)
+print.slots <- function(x, ...) { 
+  cat("I'm using the print.slots method")
+}
+
+print(one_play)
+one_play
+rm(print.slots)
+
+now <- Sys.time() 
+attributes(now)
+```
+
+##### Exercise 8.2 (p. 149)
+
+Write a new print method for the slots class. The method should call slot_display to return well-formatted slot-machine output.
+What name must you use for this method?
+
+```{r}
+class(one_play) <- "slots"
+
+args(print)
+
+print.slots <- function(x, ...) { 
+ # extract symbols
+  symbols <- attr(prize, "symbols")
+
+  # collapse symbols into single string
+  symbols <- paste(symbols, collapse = " ")
+
+  # combine symbol with prize as a regular expression
+  # \n is regular expression for new line (i.e. return or enter) 
+  string <- paste(symbols, prize, sep = "\n$")
+  
+  # display regular expression in console without quotes
+  cat(string)
+}
+  
+print.slots <- function(x, ...) { 
+  slot_display(x)
+}
+
+
+one_play
+```
+
+##### Exercise 8.3 (p. 150)
+
+Modify the play function so it assigns slots to the class attribute of its output:
+```
+play <- function() {
+  symbols <- get_symbols() 
+  structure(score(symbols), symbols = symbols)
+}
+```
+
+```{r}
+play <- function() {
+  symbols <- get_symbols() 
+  structure(score(symbols), symbols = symbols, class = "slots")
+}
+
+class(play())
+play()
+play()
+```
+
+
+### Classes
+
+```{r}
+methods(class = "factor")
+play1 <- play() 
+play1
+
+play2 <- play() 
+play2
+
+c(play1, play2)
+
+play1[1]
+```
+
+### S3 and Debugging
+### S4 and R5
+## Chapter 9. Loops
+
+### Expected Values
+
+```{r}
+die <- c(1, 2, 3, 4, 5, 6)
+```
+
+### expand.grid
+
+```{r}
+rolls <- expand.grid(die, die)
+rolls
+
+rolls$value <- rolls$Var1 + rolls$Var2 
+head(rolls, 3)
+
+prob <- c("1" = 1/8, "2" = 1/8, "3" = 1/8, "4" = 1/8, "5" = 1/8, "6" = 3/8)
+prob
+
+rolls$Var1
+prob[rolls$Var1] #
+rolls$prob1 <- prob[rolls$Var1] 
+head(rolls, 3)
+
+rolls$prob2 <- prob[rolls$Var2]
+head(rolls, 3)
+
+rolls$prob <- rolls$prob1 * rolls$prob2
+head(rolls, 3)
+sum(rolls$value * rolls$prob) # Expected Value
+```
+
+##### Exercise 9.1 (p. 160)
+
+$$E(prize) = \sum_{i = 1}^{n} (prize_i ·P(prize_i))$$
+
+Use expand.grid to make a data frame that contains every possible combination of three symbols from the wheel vector:
+```
+    wheel <- c("DD", "7", "BBB", "BB", "B", "C", "0")
+```
+Be sure to add the argument `stringsAsFactors = FALSE` to your `expand.grid` call; otherwise, `expand.grid` will save the combinations as factors, an unfortunate choice that will disrupt the score function.
+
+```{r}
+wheel <- c("DD", "7", "BBB", "BB", "B", "C", "0")
+combos <- expand.grid(wheel, wheel, wheel, stringsAsFactors = FALSE)
+combos
+```
+
+##### Exercise 9.2 (p. 161)
+
+Isolate the previous probabilities in a lookup table. What names will you use in your table?
+
+```{r}
+prob = c(0.03, 0.03, 0.06, 0.1, 0.25, 0.01, 0.52)
+prob
+
+names(prob) <- wheel
+prob
+```
+
+
+##### Exercise 9.3 (p. 161)
+
+Look up the probabilities of getting the values in Var1. Then add them to combos as a column named prob1. Then do the same for Var2 (prob2) and Var3 (prob3).
+
+```{r}
+prob[combos$Var1]
+
+combos$prob1 <- prob[combos$Var1]
+combos$prob2 <- prob[combos$Var2]
+combos$prob3 <- prob[combos$Var3]
+
+head(combos, 3)
+```
+
+##### Exercise 9.4 (p. 162)
+
+$$P(A \& B \& C \& ...) = P(A) \cdot P(B) \cdot P(C) \cdot \ldots$$
+
+Calculate the overall probabilities for each combination. Save them as a column named prob in combos, then check your work.
+You can check that the math worked by summing the probabilities. The probabilities should add up to one, because one of the combinations *must* appear when you play the slot machine. In other words, a combination will appear, with probability of one.
+
+```{r}
+combos$prob <- combos$prob1 * combos$prob2 * combos$prob3
+
+combos
+sum(combos$prob)
+```
+
+```{r}
+symbols <- c(combos[1, 1], combos[1, 2], combos[1, 3])
+score(symbols)
+```
+
+
+### for Loops
+
+```
+for (value in that) { 
+  this
+}
+```
+
+```{r}
+for (value in c("My", "first", "for", "loop")) { 
+  print("one run")
+}
+
+value # last element in the set
+
+for (value in c("My", "second", "for", "loop")) { 
+  print(value)
+}
+
+value
+
+for (word in c("My", "second", "for", "loop")) { 
+  print(word)
+}
+
+for (string in c("My", "second", "for", "loop")) {
+      print(string)
+}
+
+for (i in c("My", "second", "for", "loop")) { 
+  print(i)
+}
+
+
+for (value in c("My", "third", "for", "loop")) { 
+  value
+}
+
+
+(chars <- vector(length = 4))
+words <- c("My", "fourth", "for", "loop")
+
+for (i in 1:4) { 
+  chars[i] <- words[i] # Instead of executing on a set of objects, execute on a set of integers that you can use to index both your object and your storage vector.
+}
+
+chars
+
+combos$prize <- NA
+head(combos, 3)
+```
+
+##### Exercise 9.5 (p. 166)
+
+Construct a for loop that will run score on all 343 rows of `combos`. The loop should run score on the first three entries of the *i*th row of combos and should store the results in the ith entry of `combos$prize`.
+
+```{r}
+get_symbols()
+score(get_symbols())
+combos
+
+# For loop template to save loop result
+for (i in 1:4) {  
+  chars[i] <- words[i] 
+}
+
+score(c(combos[1, ]$Var1, combos[1, ]$Var2, combos[1, ]$Var3)) # Indexing
+
+for (i in 1:nrow(combos)) {
+  combos$prize[i] <- score(c(combos[i, ]$Var1, combos[i, ]$Var2, combos[i, ]$Var3))
+}
+
+combos
+
+# Or
+
+combos$prize <- NA
+
+for (i in 1:nrow(combos)) {
+  symbols <- c(combos[i, 1], combos[i, 2], combos[i, 3]) 
+  combos$prize[i] <- score(symbols)
+}
+
+combos
+```
+
+```{r}
+head(combos, 3)
+sum(combos$prize * combos$prob) # Expected value of prize
+```
+
+
+##### Challenge (p. 167)
+
+There are many ways to modify score that would count DDs as wild. If you would like to test your skill as an R programmer, try to write your own version of score that correctly handles diamonds.
+If you would like a more modest challenge, study the following score code. It accounts for wild diamonds in a way that I find elegant and succinct. See if you can understand each step in the code and how it achieves its result.
+
+```
+score <- function(symbols) { 
+
+  diamonds <- sum(symbols == "DD")
+  cherries <- sum(symbols == "C")
+
+  # identify case
+  # since diamonds are wild, only nondiamonds # matter for three of a kind and all bars   slots <- symbols[symbols != "DD"]
+  same <- length(unique(slots)) == 1
+  bars <- slots %in% c("B", "BB", "BBB")
+      
+  # assign prize
+  if (diamonds == 3) { 
+    prize <- 100
+  } else if (same) {
+    payouts <- c("7" = 80, "BBB" = 40, "BB" = 25, "B" = 10, "C" = 10, "0" = 0) 
+    prize <- unname(payouts[slots[1]])
+  } else if (all(bars)) { 
+    prize <- 5
+  } else if (cherries > 0) {
+    # diamonds count as cherries
+    # so long as there is one real cherry
+    prize <- c(0, 2, 5)[cherries + diamonds + 1]
+  } else { 
+    prize <- 0
+  }
+      # double for each diamond
+      prize * 2^diamonds
+}
+```
+
+
+```{r}
+score
+
+(symbols <- get_symbols())
+
+(diamonds <- sum(symbols == "DD"))
+(cherries <- sum(symbols == "C"))
+
+  # identify case
+  # since diamonds are wild, only nondiamonds # matter for three of a kind and all bars
+(slots <- symbols[symbols != "DD"])
+(same <- length(unique(slots)) == 1)
+(bars <- slots %in% c("B", "BB", "BBB"))
+      
+  # assign prize
+  if (diamonds == 3) { 
+    prize <- 100
+  } else if (same) {
+    payouts <- c("7" = 80, "BBB" = 40, "BB" = 25, "B" = 10, "C" = 10, "0" = 0) 
+    prize <- unname(payouts[slots[1]])
+  } else if (all(bars)) { 
+    prize <- 5
+  } else if (cherries > 0) {
+    # diamonds count as cherries
+    # so long as there is one real cherry
+    prize <- c(0, 2, 5)[cherries + diamonds + 1]
+  } else { 
+    prize <- 0
+  }
+      # double for each diamond
+prize * 2^diamonds
+```
+
+
+##### Exercise 9.6 (p. 168)
+
+Calculate the expected value of the slot machine when it uses the new `score` function. You can use the existing `combos` data frame, but you will need to build a for loop to recalculate `combos$prize`.
+
+```{r}
+score <- function(symbols) { 
+
+  diamonds <- sum(symbols == "DD")
+  cherries <- sum(symbols == "C")
+
+  # identify case
+  # since diamonds are wild, only nondiamonds # matter for three of a kind and all bars   slots <- symbols[symbols != "DD"]
+  same <- length(unique(slots)) == 1
+  bars <- slots %in% c("B", "BB", "BBB")
+      
+  # assign prize
+  if (diamonds == 3) { 
+    prize <- 100
+  } else if (same) {
+    payouts <- c("7" = 80, "BBB" = 40, "BB" = 25, "B" = 10, "C" = 10, "0" = 0) 
+    prize <- unname(payouts[slots[1]])
+  } else if (all(bars)) { 
+    prize <- 5
+  } else if (cherries > 0) {
+    # diamonds count as cherries
+    # so long as there is one real cherry
+    prize <- c(0, 2, 5)[cherries + diamonds + 1]
+  } else { 
+    prize <- 0
+  }
+      # double for each diamond
+      prize * 2^diamonds
+}
+```
+
+```{r}
+head(combos, 6)
+
+for (i in 1:nrow(combos)) {
+  combos$prize[i] <- score(c(combos[i, 1], combos[i, 2], combos[i, 3]))
+}
+
+head(combos, 6)
+
+sum(combos$prize * combos$prob) # Expexted value
+```
+
+
+### while Loops
+
+```
+while (condition) { 
+  code
+}
+
+```
+
+```{r}
+plays_till_broke <- function(start_with) { 
+  cash <- start_with
+  n <- 0
+  while (cash > 0) {
+        cash <- cash - 1 + play()
+  n <- n + 1 
+  }
+  n
+    }
+    plays_till_broke(100)
+```
+
+### repeat Loops
+
+```{r}
+plays_till_broke <- function(start_with) { 
+  cash <- start_with
+  n <- 0
+  repeat {
+    cash <- cash - 1 + play() 
+    n <- n + 1 
+    if(cash <= 0){
+      break
+    } 
+  }
+  n
+}
+    plays_till_broke(100)
+```
+
+## Chapter 10. Speed
+
+### Vectorized Code
+
+```{r}
+abs_loop <- function(vec){ 
+  for (i in 1:length(vec)) {
+    if (vec[i] < 0) { 
+      vec[i] <- -vec[i]
+    } 
+  }
+  vec
+}
+
+abs_sets <- function(vec) { 
+  negs <- vec < 0
+  vec[negs] <- vec[negs] * -1
+  vec
+}
+
+long <- rep(c(-1, 1), 5000000)
+
+system.time(abs_loop(long))
+system.time(abs_sets(long))
+```
+
+##### Exercise 10.1 (p. 172 - 173)
+
+Many preexisting R functions are already vectorized and have been optimized to per‐ form quickly. You can make your code faster by relying on these functions whenever possible. For example, R comes with a built-in absolute value function, abs.
+
+Check to see how much faster abs computes the absolute value of long than abs_loop and abs_set do.
+
+```{r}
+system.time(abs_loop(long))
+system.time(abs_sets(long))
+system.time(abs(long))
+```
+
+### How to write Vectorized Code
+
+```{r}
+vec <- c(1, -2, 3, -4, 5, -6, 7, -8, 9, -10)
+vec < 0
+vec[vec < 0]
+vec[vec < 0] * -1
+```
+
+##### Exercise 10.2 (p. 175)
+
+The following function converts a vector of slot symbols to a vector of new slot symbols. Can you vectorize it? How much faster does the vectorized version work?
+
+```{r}
+
+## 'for' solution
+
+change_symbols <- function(vec) { 
+  for (i in 1:length(vec)) {
+    if (vec[i] == "DD") {
+      vec[i] <- "joker"
+    } else if (vec[i] == "C") { 
+      vec[i] <- "ace"
+    } else if (vec[i] == "7") { 
+      vec[i] <- "king"
+    } else if (vec[i] == "B") { 
+      vec[i] <- "queen"
+    } else if (vec[i] == "BB") { 
+      vec[i] <- "jack"
+    } else if (vec[i] == "BBB") { 
+      vec[i] <- "ten"
+    } else {
+      vec[i] <- "nine"
+    } 
+  }
+  vec
+}
+    
+
+vec <- c("DD", "C", "7", "B", "BB", "BBB", "0")
+change_symbols(vec)
+
+many <- rep(vec, 1000000)
+
+system.time(change_symbols(many))
+
+
+## Solution
+
+change_symbols_vec <- function (vec) {
+names <- c("joker", "ace", "king", "queen",  "jack", "ten", "nine")
+vec[vec == "DD"] <- names[1]
+vec[vec == "C"] <- names[2]
+vec[vec == "7"] <- names[3]
+vec[vec == "B"] <- names[4]
+vec[vec == "BB"] <- names[5]
+vec[vec == "BBB"] <- names[6]
+vec[vec == 0] <- names[7]
+vec
+}
+
+vec <- c("DD", "C", "7", "B", "BB", "BBB", "0")
+change_symbols_vec(vec)
+
+many <- rep(vec, 1000000)
+
+system.time(change_symbols_vec(many))
+
+
+## Book's solution (1)
+
+change_vec <- function (vec) { 
+  vec[vec == "DD"] <- "joker" 
+  vec[vec == "C"] <- "ace" 
+  vec[vec == "7"] <- "king" 
+  vec[vec == "B"] <- "queen" 
+  vec[vec == "BB"] <- "jack"
+  vec[vec == "BBB"] <- "ten"
+  vec[vec == "0"] <- "nine"
+vec
+}
+
+system.time(change_vec(many))
+
+
+## Book's solution (2)
+
+change_vec2 <- function(vec){
+tb <- c("DD" = "joker", "C" = "ace", "7" = "king", "B" = "queen",
+        "BB" = "jack", "BBB" = "ten", "0" = "nine")
+      unname(tb[vec])
+}
+
+system.time(change_vec(many))
+```
+
+
+### How to Write Fast for Loops in R
+
+```{r}
+system.time(
+output <- rep(NA, 1000000) 
+for (i in 1:1000000) {
+        output[i] <- i + 1
+      }
+)
+
+system.time(
+output <- NA
+for (i in 1:1000000) {
+        output[i] <- i + 1
+      }
+)
+```
+
+### Vectorized Code in Practice
+
+```{r}
+winnings <- vector(length = 1000000) 
+for (i in 1:1000000) {
+      winnings[i] <- play()
+    }
+mean(winnings)
+
+system.time(for (i in 1:1000000) { 
+  winnings[i] <- play()
+})
+
+get_many_symbols <- function(n) {
+wheel <- c("DD", "7", "BBB", "BB", "B", "C", "0") 
+vec <- sample(wheel, size = 3 * n, replace = TRUE,
+        prob = c(0.03, 0.03, 0.06, 0.1, 0.25, 0.01, 0.52))
+      matrix(vec, ncol = 3)
+}
+
+get_many_symbols(5)
+
+play_many <- function(n) {
+  symb_mat <- get_many_symbols(n = n) 
+  data.frame(w1 = symb_mat[,1], w2 = symb_mat[,2],
+  w3 = symb_mat[,3], prize = score_many(symb_mat))
+}
+
+symbols <- matrix(
+      c("DD", "DD", "DD",
+"C", "DD", "0",
+"B", "B", "B",
+"B", "BB", "BBB",
+"C", "C", "0",
+"7", "DD", "DD"), nrow = 6, byrow = TRUE)
+
+symbols
+```
+
+##### Exercise 10.2 (p. 181)
+
+Study the model score_many function until you are satisfied that you understand how it works and could write a similar function yourself.
+
+##### Advanced Challenge (p. 181)
+
+Instead of examining the model answer, write your own vectorized version of score. Assume that the data is stored in an n × 3 matrix where each row of the matrix contains one combination of slots to be scored.
+
+You can use the version of score that treats diamonds as wild or the version of score that doesn’t. However, the model answer will use the version treating diamonds as wild.
+
+```{r}
+
+```
